@@ -1,0 +1,3 @@
+{"email":"jhkjgvv.anguandia@andela.com","name":"peter anguandia","password":"$2b$10$RUbiTR3a14TDYzBtvGqrd.dJY5i1Xphl/GA4xihZsUTkghqDFCIYW","role":"user","id":0}
+{"email":"kjv.anguandia@andela.com","name":"peter anguandia","password":"$2b$10$.SdrqDpCBmbV0wpan2vheOBmTP8KieOF9iiT4RIaDo1dQvF/S9qLO","role":"user","id":1}
+{"email":"k.anguandia@andela.com","name":"peter anguandia","password":"$2b$10$TRiYMysWphyCOsFrjMp/zOeu.xNkpFHYtFktenKa2hOczoziC0krq","role":"user","id":2}
