@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import config from '../../../config.js'
 
 dotenv.config();
 
-const secrete = process.env.JWT_SECRET;
+const {secret} = config;
 
 
 const auth = (req, res, next) => {
@@ -11,7 +12,7 @@ const auth = (req, res, next) => {
   if (!token) {
     return res.status(403).json({message: 'you need to login first'})
   }
-  const user = jwt.verify(token, secrete);
+  const user = jwt.verify(token, secret);
   req.user = user;
   next()
 }

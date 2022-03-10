@@ -1,17 +1,17 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import {appendFile, createReadStream} from 'fs';
 import readLine from 'readline';
+import config from '../../../config.js';
 
-dotenv.config();
-const secrete = process.env.JWT_SECRET;
 
 const users = [];
 
+const {secret, db} = config
+
 const fetchUsers = () => {
   let lineNo = 0;
-  const source = readLine.createInterface({input: createReadStream('src/users/models/user.txt')});
+  const source = readLine.createInterface({input: createReadStream(db)});
   source.on('line', (line) => {
     if(lineNo>= users.length) users.push(JSON.parse(line));
     lineNo++
@@ -37,14 +37,15 @@ const addUser = (req, res) => {
       user.password = hash;
       // users.push(user);
       const data = `${JSON.stringify(user)}\n`;
-      appendFile('src/users/models/user.txt', data, (err) => {
+      appendFile(db, data, (err) => {
         if (err) console.log(err);
         else {
           fetchUsers();
         }
       })
+      const token = jwt.sign(user, secret, {expiresIn: 60*5});
       status = 201
-      responseObject = {message: `user ${user.name} successfully registered`, user}
+      responseObject = {message: `user ${user.name} successfully registered`, user, token}
     }
     res.status(status).json(responseObject);
   })
@@ -61,10 +62,10 @@ const login = (req, res) => {
       status = 500;
     }
     if(verified) {
-      const token = jwt.sign(user, secrete, {expiresIn: 60*5});
+      const token = jwt.sign(user, secret, {expiresIn: 60*5});
       const {passsword, ...rest} = user;
       responseObject = {message: `welcome ${user.name}`, user: rest, token};
-      const decoded = jwt.verify(token, secrete);
+      const decoded = jwt.verify(token, secret);
       status = 200;
     } else {
       responseObject = {error: 'invalid email or password'};
